@@ -1,31 +1,29 @@
-import type { FakeDataType } from '@/types'
+import type { FakeDataType, MousePointerPosType } from '@/types'
 import Trash from '@/src/icons/Trash'
 import { useEffect, useRef, useState } from 'react'
+import { autoGrow, setNewOffset, setZIndex } from '../utils'
 
 const NoteCard = ({ note }: { note: FakeDataType }) => {
   // console.log('🚀 ~ NoteCard ~ note:', note)
   const body = JSON.parse(note.body)
   const colors = JSON.parse(note.colors)
-  const mouseStartPos = { x: 0, y: 0 }
+  const mouseStartPos: MousePointerPosType = { x: 0, y: 0 }
 
-  const [position, setPosition] = useState<{ x: number; y: number }>(
+  const [position, setPosition] = useState<MousePointerPosType>(
     JSON.parse(note.position)
   )
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const cardRef = useRef<HTMLDivElement | null>(null)
 
-  const autoGrow = (
-    textareaRef: React.RefObject<HTMLTextAreaElement | null>
-  ) => {
-    const { current } = textareaRef
-    if (!current) return
-    current.style.height = 'auto'
-    current.style.height = current.scrollHeight + 'px'
-  }
+  useEffect(() => {
+    autoGrow(textAreaRef)
+  }, [])
 
   const mouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     mouseStartPos.x = event.clientX
     mouseStartPos.y = event.clientY
+
+    setZIndex(cardRef)
 
     document.addEventListener('mousemove', mouseMove)
     document.addEventListener('mouseup', mouseUp)
@@ -42,20 +40,18 @@ const NoteCard = ({ note }: { note: FakeDataType }) => {
 
     if (!cardRef.current) return
 
-    setPosition({
-      x: cardRef.current.offsetLeft - mouseMoveDir.x,
-      y: cardRef.current.offsetTop - mouseMoveDir.y,
-    })
+    const boundedOffset: MousePointerPosType = setNewOffset(
+      cardRef.current,
+      mouseMoveDir
+    )
+
+    setPosition(boundedOffset)
   }
 
   const mouseUp = (event: MouseEvent) => {
     document.removeEventListener('mousemove', mouseMove)
     document.removeEventListener('mouseup', mouseUp)
   }
-
-  useEffect(() => {
-    autoGrow(textAreaRef)
-  }, [])
 
   return (
     <div
@@ -76,6 +72,7 @@ const NoteCard = ({ note }: { note: FakeDataType }) => {
       </div>
       <div className='card-body'>
         <textarea
+          onFocus={() => setZIndex(cardRef)}
           ref={textAreaRef}
           style={{ color: colors.colorText }}
           defaultValue={body}

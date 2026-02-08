@@ -1,7 +1,7 @@
 // types.d.ts (in project root)
 
 declare module '@/fakeData' {
-  export interface FakeDataType {
+  export type FakeDataType = {
     $id: number
     body: string
     colors: string
@@ -11,9 +11,11 @@ declare module '@/fakeData' {
   export const fakeData: FakeDataType[]
 }
 
-export interface FakeDataType {
+export type FakeDataType = {
   $id: number
   body: string
   colors: string
   position: string
 }
+
+export type MousePointerPosType = { x: number; y: number }
