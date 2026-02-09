@@ -7,7 +7,7 @@ const NoteCard = ({ note }: { note: FakeDataType }) => {
   // console.log('🚀 ~ NoteCard ~ note:', note)
   const body = JSON.parse(note.body)
   const colors = JSON.parse(note.colors)
-  const mouseStartPos: MousePointerPosType = { x: 0, y: 0 }
+  const mouseStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
 
   const [position, setPosition] = useState<MousePointerPosType>(
     JSON.parse(note.position)
@@ -20,8 +20,8 @@ const NoteCard = ({ note }: { note: FakeDataType }) => {
   }, [])
 
   const mouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
-    mouseStartPos.x = event.clientX
-    mouseStartPos.y = event.clientY
+    mouseStartPos.current.x = event.clientX
+    mouseStartPos.current.y = event.clientY
 
     setZIndex(cardRef)
 
@@ -30,13 +30,13 @@ const NoteCard = ({ note }: { note: FakeDataType }) => {
   }
 
   const mouseMove = (event: MouseEvent) => {
-    let mouseMoveDir = {
-      x: mouseStartPos.x - event.clientX,
-      y: mouseStartPos.y - event.clientY,
+    const mouseMoveDir = {
+      x: mouseStartPos.current.x - event.clientX,
+      y: mouseStartPos.current.y - event.clientY,
     }
 
-    mouseStartPos.x = event.clientX
-    mouseStartPos.y = event.clientY
+    mouseStartPos.current.x = event.clientX
+    mouseStartPos.current.y = event.clientY
 
     if (!cardRef.current) return
 
@@ -48,7 +48,7 @@ const NoteCard = ({ note }: { note: FakeDataType }) => {
     setPosition(boundedOffset)
   }
 
-  const mouseUp = (event: MouseEvent) => {
+  const mouseUp = () => {
     document.removeEventListener('mousemove', mouseMove)
     document.removeEventListener('mouseup', mouseUp)
   }
