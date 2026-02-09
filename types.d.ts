@@ -25,3 +25,11 @@ export type CollectionType = {
   tableId: string
   dbId: string
 }
+
+export type RowListResponse = Models.RowList<Models.DefaultRow>
+
+export type WrapperFunctionType = {
+  listRows: () => Promise<RowListResponse>
+}
+
+export type DBType = Record<string, WrapperFunctionType>
