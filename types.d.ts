@@ -17,7 +17,7 @@ export type NoteDataTypePayload = {
   position?: string
 }
 
-export type NoteDataType = {
+export type NoteDataType = Models.DefaultRow & {
   $id: string
   body: string
   colors: string

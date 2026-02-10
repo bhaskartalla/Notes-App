@@ -1,6 +1,7 @@
 import type { CollectionType, NoteDataTypePayload } from '@/types'
 import { collections, tablesDB } from './config'
 import type { Models } from 'appwrite'
+import { generateRandomString } from '../utils'
 
 type WrapperFunctionType = {
   listRows: () => Promise<Models.RowList<Models.DefaultRow>>
@@ -9,6 +10,7 @@ type WrapperFunctionType = {
     payload: NoteDataTypePayload
   ) => Promise<Models.DefaultRow>
   deleteRow: (rowId: string) => Promise<object>
+  createRow: (payload: NoteDataTypePayload) => Promise<Models.DefaultRow>
 }
 type DBType = Record<string, WrapperFunctionType>
 
@@ -36,6 +38,15 @@ collections.forEach((collection: CollectionType) => {
         tableId: collection.tableId,
         rowId,
       }),
+
+    createRow: async (payload) => {
+      return await tablesDB.createRow({
+        databaseId: collection.dbId,
+        tableId: collection.tableId,
+        rowId: generateRandomString(20),
+        data: payload,
+      })
+    },
   }
 })
 
