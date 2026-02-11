@@ -6,6 +6,8 @@ type NotesContextType = {
   setNotes: Dispatch<SetStateAction<NoteDataType[]>>
   loading: boolean
   setLoading: Dispatch<SetStateAction<boolean>>
+  selectedNote: NoteDataType
+  setSelectedNote: Dispatch<SetStateAction<NoteDataType>>
 }
 
 export const NotesContext = createContext({
@@ -13,4 +15,6 @@ export const NotesContext = createContext({
   setNotes: () => {},
   loading: false,
   setLoading: () => {},
+  selectedNote: null,
+  setSelectedNote: () => {},
 } as NotesContextType)

@@ -7,6 +7,7 @@ import { NotesContext } from './NotesContext'
 const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false)
   const [notes, setNotes] = useState<NoteDataType[]>([])
+  const [selectedNote, setSelectedNote] = useState<NoteDataType>(null)
 
   useEffect(() => {
     const init = async () => {
@@ -31,7 +32,16 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   return (
-    <NotesContext.Provider value={{ notes, setNotes, loading, setLoading }}>
+    <NotesContext.Provider
+      value={{
+        notes,
+        setNotes,
+        loading,
+        setLoading,
+        selectedNote,
+        setSelectedNote,
+      }}
+    >
       {loading ? (
         <div
           style={{

@@ -1,5 +1,3 @@
-// types.d.ts (in project root)
-
 declare module '@/fakeData' {
   export type NoteDataType = {
     $id: number
@@ -25,6 +23,13 @@ export type NoteDataType = Models.DefaultRow & {
 }
 
 export type MousePointerPosType = { x: number; y: number }
+
+export type ColorType = {
+  id: string
+  colorHeader: string
+  colorBody: string
+  colorText: string
+}
 
 export type CollectionType = {
   name: string

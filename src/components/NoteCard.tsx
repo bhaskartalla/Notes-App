@@ -1,9 +1,10 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { autoGrow, bodyParser, setNewOffset, setZIndex } from '../utils'
 import { db } from '../apppwrite/databases'
 import Spinner from '../icons/Spinner'
 import DeleteButton from './DeleteButton'
+import { NotesContext } from '../context/NotesContext'
 
 type NoteCardProps = {
   note: NoteDataType
@@ -13,6 +14,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const body = bodyParser(note.body)
   const colors = bodyParser(note.colors)
   const mouseStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
+  const { setSelectedNote } = useContext(NotesContext)
 
   const [saving, setSaving] = useState(false)
 
@@ -25,6 +27,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
 
   useEffect(() => {
     autoGrow(textAreaRef)
+    setZIndex(cardRef)
   }, [])
 
   const mouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -35,6 +38,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
     mouseStartPos.current.y = event.clientY
 
     setZIndex(cardRef)
+    setSelectedNote(note)
 
     document.addEventListener('mousemove', mouseMove)
     document.addEventListener('mouseup', mouseUp)
@@ -115,7 +119,10 @@ const NoteCard = ({ note }: NoteCardProps) => {
       <div className='card-body'>
         <textarea
           onKeyUp={handleOnKeyUp}
-          onFocus={() => setZIndex(cardRef)}
+          onFocus={() => {
+            setZIndex(cardRef)
+            setSelectedNote(note)
+          }}
           ref={textAreaRef}
           style={{ color: colors.colorText }}
           defaultValue={body}

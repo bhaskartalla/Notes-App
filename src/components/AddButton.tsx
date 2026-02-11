@@ -7,7 +7,7 @@ import { NotesContext } from '../context/NotesContext'
 const AddButton = () => {
   const startingPos = useRef(10)
 
-  const { setNotes } = useContext(NotesContext)
+  const { setNotes, setSelectedNote } = useContext(NotesContext)
 
   const addNote = async () => {
     try {
@@ -22,6 +22,7 @@ const AddButton = () => {
       startingPos.current += 10
       const response = await db.notes.createRow(payload)
       setNotes((prev) => [...prev, response])
+      setSelectedNote(response)
     } catch (error) {
       console.error('🚀 ~ addNote ~ error:', error)
     }
