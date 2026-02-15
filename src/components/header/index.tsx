@@ -2,7 +2,7 @@ import { NotesContext } from '@/src/context/NotesContext'
 import { lazy, useContext } from 'react'
 import { Outlet } from 'react-router-dom'
 import styles from './styles.module.css'
-import Toast from '../qwer'
+import Toast from '../toast'
 
 const Saving = lazy(() => import('./Saving'))
 const UserInfo = lazy(() => import('./UserInfo'))
