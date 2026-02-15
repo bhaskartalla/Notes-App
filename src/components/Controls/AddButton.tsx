@@ -1,13 +1,14 @@
 import { useContext, useRef } from 'react'
 // import { db } from '../apppwrite/databases'
-import Plus from '../icons/Plus'
-import colors from '@/src/assets/colors.json'
-import { NotesContext } from '../context/NotesContext'
-import { dbFunctions } from '../firebaseConfig/dbFunctions'
-import { STATUS } from '../utils'
+import colors from '@/src/utils/colors.json'
+import { STATUS } from '@/src/utils'
+import { NotesContext } from '@/src/context/NotesContext'
+import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
+import Plus from '@/src/assets/icons/Plus'
+import styles from './styles.module.css'
 
 const AddButton = () => {
-  const startingPos = useRef(10)
+  const startingPos = useRef(70)
 
   const { setNotes, setSelectedNote, setStatus } = useContext(NotesContext)
 
@@ -36,7 +37,7 @@ const AddButton = () => {
 
   return (
     <div
-      id='add-btn'
+      className={styles.add_btn}
       onClick={addNote}
     >
       <Plus />

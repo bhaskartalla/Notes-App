@@ -1,6 +1,6 @@
 import type { NoteDataType } from '@/types'
 import { useEffect, useState, type ReactNode } from 'react'
-import Spinner from '../icons/Spinner'
+import Spinner from '@/src/assets/icons/Spinner'
 import { NotesContext } from './NotesContext'
 import { observeAuthState } from '../firebaseConfig/auth'
 import type { User } from 'firebase/auth'
@@ -36,20 +36,12 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       <div id='app'>
-        {loading ? (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100vh',
-            }}
-          >
+        {loading && (
+          <div className='main-spinner'>
             <Spinner size='100' />
           </div>
-        ) : (
-          children
         )}
+        {children}
       </div>
     </NotesContext.Provider>
   )

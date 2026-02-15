@@ -1,63 +1,26 @@
 import { NotesContext } from '@/src/context/NotesContext'
-import { logOut } from '@/src/firebaseConfig/auth'
 import { useContext } from 'react'
 import { Outlet } from 'react-router-dom'
-import Saving from '../Saving'
+import Saving from './Saving'
+import styles from './styles.module.css'
+import UserInfo from './UserInfo'
 
 const HeaderLayout = () => {
-  const { user } = useContext(NotesContext)
-
-  const handleLogout = async () => {
-    try {
-      await logOut()
-      console.log('User signed out successfully')
-    } catch (error) {
-      console.error('Error signing out:', error)
-    }
-  }
+  const { user, status } = useContext(NotesContext)
 
   return (
     <>
       <header
         id='header'
-        className='header-main'
+        className={styles.header_main}
       >
-        <div className='header-title'>
-          <span className='logo-emoji'>📝</span>
+        <div className={styles.header_title}>
+          <span className={styles.logo_emoji}>📝</span>
           <h1>Sticky Notes</h1>
         </div>
-        <div className='header-content'>
-          <Saving />
-          {user && (
-            <>
-              <div className='user-info'>
-                <span className='user-name'>{user.displayName}</span>
-                <div className='user-avatar'>
-                  {user.photoURL ? (
-                    <img
-                      src={user.photoURL || 'https://via.placeholder.com/32'}
-                      alt='User Profile'
-                      referrerPolicy='no-referrer'
-                      loading='lazy'
-                    />
-                  ) : (
-                    <span>
-                      {(user.displayName ?? '')
-                        .split(' ')
-                        .map((name: string) => name[0].toUpperCase())
-                        .join('')}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <button
-                onClick={handleLogout}
-                className='logout-btn'
-              >
-                Logout
-              </button>
-            </>
-          )}
+        <div className={styles.header_content}>
+          <Saving status={status} />
+          {user && <UserInfo user={user} />}
         </div>
       </header>
       <Outlet />

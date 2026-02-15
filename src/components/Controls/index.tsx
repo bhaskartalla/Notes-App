@@ -1,13 +1,17 @@
 import AddButton from './AddButton'
-import colorsData from '@/src/assets/colors.json'
+import colorsData from '@/src/utils/colors.json'
 import Color from './Color'
 import type { ColorType } from '@/types'
+import styles from './styles.module.css'
 
 const Controls = () => {
   const colors: ColorType[] = colorsData
 
   return (
-    <div id='controls'>
+    <div
+      id='controls'
+      className={styles.controls}
+    >
       <AddButton />
       {colors.map((color) => (
         <Color

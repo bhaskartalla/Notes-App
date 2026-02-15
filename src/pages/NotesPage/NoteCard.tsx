@@ -1,10 +1,17 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { autoGrow, bodyParser, setNewOffset, setZIndex, STATUS } from '../utils'
+import {
+  autoGrow,
+  bodyParser,
+  setNewOffset,
+  setZIndex,
+  STATUS,
+} from '@/src/utils'
+import { NotesContext } from '@/src/context/NotesContext'
+import DeleteButton from '@/src/components/DeleteButton'
+import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 // import { db } from '../apppwrite/databases'
-import DeleteButton from './DeleteButton'
-import { NotesContext } from '../context/NotesContext'
-import { dbFunctions } from '../firebaseConfig/dbFunctions'
+import styles from './styles.module.css'
 
 type NoteCardProps = {
   note: NoteDataType
@@ -96,7 +103,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   return (
     <div
       ref={cardRef}
-      className='card'
+      className={styles.card}
       style={{
         backgroundColor: colors.colorBody,
         left: `${position.x}px`,
@@ -105,12 +112,12 @@ const NoteCard = ({ note }: NoteCardProps) => {
     >
       <div
         onMouseDown={mouseDown}
-        className='card-header'
+        className={styles.card_header}
         style={{ backgroundColor: colors.colorHeader }}
       >
         <DeleteButton noteId={note.$id} />
       </div>
-      <div className='card-body'>
+      <div className={styles.card_body}>
         <textarea
           onKeyUp={handleOnKeyUp}
           onFocus={() => {

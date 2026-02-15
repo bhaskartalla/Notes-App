@@ -1,9 +1,10 @@
 import type { ColorType } from '@/types'
 import { useContext } from 'react'
-import { NotesContext } from '../context/NotesContext'
 // import { db } from '../apppwrite/databases'
-import { dbFunctions } from '../firebaseConfig/dbFunctions'
-import { STATUS } from '../utils'
+import styles from './styles.module.css'
+import { NotesContext } from '@/src/context/NotesContext'
+import { STATUS } from '@/src/utils'
+import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 
 const Color = ({ color }: { color: ColorType }) => {
   const { selectedNote, setNotes, setStatus } = useContext(NotesContext)
@@ -36,7 +37,7 @@ const Color = ({ color }: { color: ColorType }) => {
 
   return (
     <div
-      className='color'
+      className={styles.color}
       onClick={changeColor}
       style={{ backgroundColor: color.colorBody }}
     ></div>

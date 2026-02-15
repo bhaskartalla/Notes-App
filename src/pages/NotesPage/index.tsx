@@ -1,8 +1,8 @@
-import NoteCard from '@/src/components/NoteCard'
 import { useContext } from 'react'
 import type { NoteDataType } from '@/types'
 import { NotesContext } from '@/src/context/NotesContext'
 import Controls from '@/src/components/Controls'
+import NoteCard from './NoteCard'
 
 const NotesPage = () => {
   const { notes } = useContext(NotesContext)
