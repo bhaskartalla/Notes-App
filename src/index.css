@@ -90,3 +90,7 @@ body {
     opacity: 1;
   }
 }
+
+.firebase-emulator-warning {
+  display: none;
+}

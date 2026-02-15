@@ -18,6 +18,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  z-index: 6000;
 }
 
 .toast {
@@ -31,9 +32,30 @@
 }
 
 .success {
+  border-top-color: unset;
   border-left-color: #9bd1de;
 }
 
 .error {
   border-left-color: #ff6b6b;
+  border-top-color: unset;
+}
+@media (max-width: 480px) {
+  .toast {
+    bottom: 20px;
+    right: 50%;
+    transform: translate(50%, 100px);
+    min-width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
+  }
+
+  .toast:not(.hide) {
+    opacity: 1;
+    transform: translate(50%, 0);
+  }
+
+  .hide {
+    opacity: 0;
+    transform: translate(50%, 100px);
+  }
 }

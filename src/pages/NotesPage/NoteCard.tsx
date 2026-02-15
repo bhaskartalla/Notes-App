@@ -32,17 +32,14 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const keyUpTimer = useRef<number>(0)
   const isDragging = useRef<boolean>(false)
 
-  // Unified pointer down handler for both mouse and touch
   const handlePointerDown = (
     event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
   ) => {
     const target = event.target as HTMLElement
     if (target.id !== 'card-header') return
 
-    // Prevent default to avoid scrolling on touch
     event.preventDefault()
 
-    // Get coordinates from mouse or touch event
     const clientX =
       'touches' in event ? event.touches[0].clientX : event.clientX
     const clientY =
@@ -55,7 +52,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
     setZIndex(cardRef)
     setSelectedNote(note)
 
-    // Add listeners for both mouse and touch
     document.addEventListener('mousemove', handlePointerMove)
     document.addEventListener('mouseup', handlePointerUp)
     document.addEventListener('touchmove', handlePointerMove, {
@@ -64,16 +60,13 @@ const NoteCard = ({ note }: NoteCardProps) => {
     document.addEventListener('touchend', handlePointerUp)
   }
 
-  // Unified pointer move handler
   const handlePointerMove = (event: MouseEvent | TouchEvent) => {
     if (!isDragging.current) return
 
-    // Prevent scrolling on touch devices
     if (event.type === 'touchmove') {
       event.preventDefault()
     }
 
-    // Get coordinates from mouse or touch event
     const clientX =
       'touches' in event ? event.touches[0].clientX : event.clientX
     const clientY =
@@ -96,13 +89,11 @@ const NoteCard = ({ note }: NoteCardProps) => {
     setPosition(boundedOffset)
   }
 
-  // Unified pointer up handler
   const handlePointerUp = async () => {
     if (!isDragging.current) return
 
     isDragging.current = false
 
-    // Remove all listeners
     document.removeEventListener('mousemove', handlePointerMove)
     document.removeEventListener('mouseup', handlePointerUp)
     document.removeEventListener('touchmove', handlePointerMove)
@@ -164,7 +155,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
         className={styles.card_header}
         style={{
           backgroundColor: colors.colorHeader,
-          touchAction: 'none', // Prevent default touch behaviors
+          touchAction: 'none',
           cursor: 'grab',
         }}
       >
