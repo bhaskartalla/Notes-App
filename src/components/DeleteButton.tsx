@@ -3,7 +3,7 @@ import Trash from '../icons/Trash'
 import { useContext } from 'react'
 import { NotesContext } from '../context/NotesContext'
 import { STATUS } from '../utils'
-import { dbFunctions } from '../firebaseCloudStore/dbFunctions'
+import { dbFunctions } from '../firebaseConfig/dbFunctions'
 
 type DeleteButtonProps = {
   noteId: string

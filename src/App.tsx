@@ -1,36 +1,37 @@
 import NotesPage from './pages/NotesPage'
-import Saving from './components/Saving'
 import NotesProvider from './context/NotesProvider'
 import AuthenticationPage from './pages/AuthenticationPage'
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Outlet,
   Route,
   RouterProvider,
 } from 'react-router-dom'
+import ProtectedRoute from './components/routing/ProtectedRoute'
+import PublicRoute from './components/routing/PublicRoute'
+import HeaderLayout from './components/header'
 
-const RootLayout = () => (
-  <>
-    <div id='header'>
-      <Saving />
-    </div>
-    <Outlet />
-  </>
-)
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
       path='/'
-      element={<RootLayout />}
+      element={<HeaderLayout />}
     >
       <Route
         index
-        element={<NotesPage />}
+        element={
+          <ProtectedRoute>
+            <NotesPage />
+          </ProtectedRoute>
+        }
       />
       <Route
-        path='signin'
-        element={<AuthenticationPage />}
+        path='/signin'
+        element={
+          <PublicRoute>
+            <AuthenticationPage />
+          </PublicRoute>
+        }
       />
     </Route>
   )

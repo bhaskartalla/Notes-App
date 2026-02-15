@@ -4,7 +4,7 @@ import { autoGrow, bodyParser, setNewOffset, setZIndex, STATUS } from '../utils'
 // import { db } from '../apppwrite/databases'
 import DeleteButton from './DeleteButton'
 import { NotesContext } from '../context/NotesContext'
-import { dbFunctions } from '../firebaseCloudStore/dbFunctions'
+import { dbFunctions } from '../firebaseConfig/dbFunctions'
 
 type NoteCardProps = {
   note: NoteDataType

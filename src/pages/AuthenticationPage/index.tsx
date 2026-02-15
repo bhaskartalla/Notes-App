@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { signInWithGoogle } from '@/src/firebaseConfig/auth'
+import { useState } from 'react'
 
 const SignIn = ({ handleSignUpView }: { handleSignUpView: () => void }) => {
   return (
@@ -53,6 +54,12 @@ const SignIn = ({ handleSignUpView }: { handleSignUpView: () => void }) => {
 }
 
 const SignUp = ({ handleSignInView }: { handleSignInView: () => void }) => {
+  const handleRegister = () => {}
+
+  const handleGoogleSignUp = () => {
+    signInWithGoogle()
+  }
+
   return (
     <div id='registerForm'>
       <div className='form-title'>Create Account</div>
@@ -89,7 +96,7 @@ const SignUp = ({ handleSignInView }: { handleSignInView: () => void }) => {
 
       <button
         className='submit-btn'
-        onClick={() => 'handleRegister()'}
+        onClick={handleRegister}
       >
         Create Account
       </button>
@@ -100,7 +107,7 @@ const SignUp = ({ handleSignInView }: { handleSignInView: () => void }) => {
 
       <button
         className='google-btn'
-        onClick={() => 'handleGoogleSignUp()'}
+        onClick={handleGoogleSignUp}
       >
         <div className='google-icon'>🔍</div>
         Sign up with Google
@@ -117,32 +124,19 @@ const SignUp = ({ handleSignInView }: { handleSignInView: () => void }) => {
 const AuthenticationPage = () => {
   const [isSignInView, setIsSignInView] = useState(true)
 
-  useEffect(() => {
-    console.log('🚀 ~ AuthenticationPage ~ isSignInView:', isSignInView)
-  }, [isSignInView])
-
   return (
     <div className='auth-container'>
       <div className='auth-card'>
-        {/*  Header  */}
         <div className='auth-header'>
           <h1>📝 Notes App</h1>
           <p>Keep your thoughts organized</p>
         </div>
 
-        {/*  Body  */}
         <div className='auth-body'>
-          {/*  Messages  */}
           <div
             id='errorMessage'
             className='error-message'
           ></div>
-          <div
-            id='successMessage'
-            className='success-message'
-          ></div>
-
-          {/*  Login Form  */}
 
           {isSignInView ? (
             <SignIn handleSignUpView={() => setIsSignInView(false)} />

@@ -1,39 +1,24 @@
 import type { NoteDataType } from '@/types'
 import { useEffect, useState, type ReactNode } from 'react'
 import Spinner from '../icons/Spinner'
-// import { db } from '../apppwrite/databases'
 import { NotesContext } from './NotesContext'
-import { dbFunctions } from '../firebaseCloudStore/dbFunctions'
+import { observeAuthState } from '../firebaseConfig/auth'
+import type { User } from 'firebase/auth'
 
 const NotesProvider = ({ children }: { children: ReactNode }) => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [notes, setNotes] = useState<NoteDataType[]>([])
   const [selectedNote, setSelectedNote] = useState<NoteDataType>(null)
   const [status, setStatus] = useState('')
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        setLoading(true)
-        const response: NoteDataType[] =
-          await dbFunctions.notes.getAllDocuments()
-        setNotes(response.map((note) => ({ ...note, $id: note.id })))
-
-        // const response = await db.notes.listRows()
-        // setNotes(
-        //   response.rows.map((row) => ({
-        //     $id: row.$id,
-        //     body: row.body,
-        //     colors: row.colors,
-        //     position: row.position,
-        //   }))
-        // )
-      } catch (error) {
-        console.log('🚀 ~ init ~ error:', error)
-      }
+    const unsubscribe = observeAuthState((user: User | null) => {
+      setUser(user)
       setLoading(false)
-    }
-    init()
+    })
+
+    return unsubscribe
   }, [])
 
   return (
@@ -47,6 +32,7 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
         setSelectedNote,
         status,
         setStatus,
+        user,
       }}
     >
       <div id='app'>
