@@ -21,84 +21,92 @@ type NoteCardProps = {
 const NoteCard = ({ note }: NoteCardProps) => {
   const body = bodyParser(note.body)
   const colors = bodyParser(note.colors)
-  const mouseStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
+  const pointerStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
   const { setSelectedNote, setStatus, user, setToast } =
     useContext(NotesContext)
-
   const [position, setPosition] = useState<MousePointerPosType>(
     bodyParser(note.position)
   )
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const cardRef = useRef<HTMLDivElement | null>(null)
   const keyUpTimer = useRef<number>(0)
+  const isDragging = useRef<boolean>(false)
 
-  useEffect(() => {
-    autoGrow(textAreaRef)
+  // Unified pointer down handler for both mouse and touch
+  const handlePointerDown = (
+    event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
+    const target = event.target as HTMLElement
+    if (target.id !== 'card-header') return
+
+    // Prevent default to avoid scrolling on touch
+    event.preventDefault()
+
+    // Get coordinates from mouse or touch event
+    const clientX =
+      'touches' in event ? event.touches[0].clientX : event.clientX
+    const clientY =
+      'touches' in event ? event.touches[0].clientY : event.clientY
+
+    pointerStartPos.current.x = clientX
+    pointerStartPos.current.y = clientY
+    isDragging.current = true
+
     setZIndex(cardRef)
-  }, [])
+    setSelectedNote(note)
 
-  const mouseMove = (event: MouseEvent) => {
-    const mouseMoveDir = {
-      x: mouseStartPos.current.x - event.clientX,
-      y: mouseStartPos.current.y - event.clientY,
+    // Add listeners for both mouse and touch
+    document.addEventListener('mousemove', handlePointerMove)
+    document.addEventListener('mouseup', handlePointerUp)
+    document.addEventListener('touchmove', handlePointerMove, {
+      passive: false,
+    })
+    document.addEventListener('touchend', handlePointerUp)
+  }
+
+  // Unified pointer move handler
+  const handlePointerMove = (event: MouseEvent | TouchEvent) => {
+    if (!isDragging.current) return
+
+    // Prevent scrolling on touch devices
+    if (event.type === 'touchmove') {
+      event.preventDefault()
     }
 
-    mouseStartPos.current.x = event.clientX
-    mouseStartPos.current.y = event.clientY
+    // Get coordinates from mouse or touch event
+    const clientX =
+      'touches' in event ? event.touches[0].clientX : event.clientX
+    const clientY =
+      'touches' in event ? event.touches[0].clientY : event.clientY
+
+    const pointerMoveDir = {
+      x: pointerStartPos.current.x - clientX,
+      y: pointerStartPos.current.y - clientY,
+    }
+
+    pointerStartPos.current.x = clientX
+    pointerStartPos.current.y = clientY
 
     if (!cardRef.current) return
 
     const boundedOffset: MousePointerPosType = setNewOffset(
       cardRef.current,
-      mouseMoveDir
+      pointerMoveDir
     )
-
     setPosition(boundedOffset)
   }
 
-  const mouseUp = async () => {
-    document.removeEventListener('mousemove', mouseMove)
-    document.removeEventListener('mouseup', mouseUp)
+  // Unified pointer up handler
+  const handlePointerUp = async () => {
+    if (!isDragging.current) return
 
-    if (!cardRef.current) return
-    setStatus(STATUS.SAVING)
-    saveData('position', JSON.stringify(setNewOffset(cardRef.current)))
-  }
+    isDragging.current = false
 
-  const pointerStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
-
-  const pointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement
-    if (target.id !== 'card-header') return
-
-    pointerStartPos.current.x = event.clientX
-    pointerStartPos.current.y = event.clientY
-
-    setZIndex(cardRef)
-    setSelectedNote(note)
-
-    document.addEventListener('pointermove', pointerMove)
-    document.addEventListener('pointerup', pointerUp)
-  }
-
-  const pointerMove = (event: PointerEvent) => {
-    const moveDir = {
-      x: pointerStartPos.current.x - event.clientX,
-      y: pointerStartPos.current.y - event.clientY,
-    }
-
-    pointerStartPos.current.x = event.clientX
-    pointerStartPos.current.y = event.clientY
-
-    if (!cardRef.current) return
-
-    const boundedOffset = setNewOffset(cardRef.current, moveDir)
-    setPosition(boundedOffset)
-  }
-
-  const pointerUp = async () => {
-    document.removeEventListener('pointermove', pointerMove)
-    document.removeEventListener('pointerup', pointerUp)
+    // Remove all listeners
+    document.removeEventListener('mousemove', handlePointerMove)
+    document.removeEventListener('mouseup', handlePointerUp)
+    document.removeEventListener('touchmove', handlePointerMove)
+    document.removeEventListener('touchend', handlePointerUp)
 
     if (!cardRef.current) return
 
@@ -110,7 +118,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
     const payload = { [key]: value }
     try {
       await updateNote(user?.uid ?? '', note.$id, payload)
-      // await dbFunctions.notes.updateDocument(note.$id, payload)
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
@@ -119,15 +126,25 @@ const NoteCard = ({ note }: NoteCardProps) => {
 
   const handleOnKeyUp = () => {
     setStatus(STATUS.SAVING)
-
     if (keyUpTimer.current) {
       clearTimeout(keyUpTimer.current)
     }
-
     keyUpTimer.current = setTimeout(() => {
       saveData('body', textAreaRef.current?.value ?? '')
     }, 1000)
   }
+
+  useEffect(() => {
+    autoGrow(textAreaRef)
+    setZIndex(cardRef)
+
+    return () => {
+      document.removeEventListener('mousemove', handlePointerMove)
+      document.removeEventListener('mouseup', handlePointerUp)
+      document.removeEventListener('touchmove', handlePointerMove)
+      document.removeEventListener('touchend', handlePointerUp)
+    }
+  }, [])
 
   return (
     <div
@@ -142,10 +159,14 @@ const NoteCard = ({ note }: NoteCardProps) => {
     >
       <div
         id='card-header'
-        // onMouseDown={mouseDown}
-        onPointerDown={pointerDown}
+        onMouseDown={handlePointerDown}
+        onTouchStart={handlePointerDown}
         className={styles.card_header}
-        style={{ backgroundColor: colors.colorHeader }}
+        style={{
+          backgroundColor: colors.colorHeader,
+          touchAction: 'none', // Prevent default touch behaviors
+          cursor: 'grab',
+        }}
       >
         <DeleteButton noteId={note.$id} />
       </div>
@@ -165,4 +186,5 @@ const NoteCard = ({ note }: NoteCardProps) => {
     </div>
   )
 }
+
 export default NoteCard
