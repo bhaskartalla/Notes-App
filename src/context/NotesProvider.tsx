@@ -4,10 +4,9 @@ import Spinner from '@/src/assets/icons/Spinner'
 import { NotesContext } from './NotesContext'
 import { observeAuthState } from '../firebaseConfig/auth'
 import type { Unsubscribe, User } from 'firebase/auth'
-import { getUserNotes } from '../firebaseConfig/firestore'
 import { getToastErrorMessage } from '../utils'
 import { db } from '../firebaseConfig/config'
-import { collection, onSnapshot, query } from 'firebase/firestore'
+import { collection, onSnapshot } from 'firebase/firestore'
 
 const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true)
