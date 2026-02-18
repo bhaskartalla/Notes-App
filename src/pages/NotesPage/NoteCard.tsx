@@ -10,7 +10,6 @@ import {
 } from '@/src/utils'
 import { NotesContext } from '@/src/context/NotesContext'
 import DeleteButton from '@/src/components/DeleteButton'
-// import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 import styles from './styles.module.css'
 import { updateNote } from '@/src/firebaseConfig/firestore'
 

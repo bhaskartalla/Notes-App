@@ -2,7 +2,6 @@ import { useContext, useRef } from 'react'
 import colors from '@/src/utils/colors.json'
 import { getToastErrorMessage, STATUS } from '@/src/utils'
 import { NotesContext } from '@/src/context/NotesContext'
-// import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 import Plus from '@/src/assets/icons/Plus'
 import styles from './styles.module.css'
 import { createNote } from '@/src/firebaseConfig/firestore'
@@ -27,7 +26,6 @@ const AddButton = () => {
       }
       startingPos.current += 10
       const response = await createNote(user?.uid ?? '', payload)
-      // const response = await dbFunctions.notes.createDocument(payload)
       setNotes((prev) => [...prev, response])
       setSelectedNote(response)
     } catch (error) {

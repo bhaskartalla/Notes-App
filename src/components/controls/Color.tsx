@@ -3,7 +3,6 @@ import { useContext } from 'react'
 import styles from './styles.module.css'
 import { NotesContext } from '@/src/context/NotesContext'
 import { getToastErrorMessage, STATUS } from '@/src/utils'
-// import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 import { updateNote } from '@/src/firebaseConfig/firestore'
 
 const Color = ({ color }: { color: ColorType }) => {
@@ -29,7 +28,6 @@ const Color = ({ color }: { color: ColorType }) => {
         notes[curretIndex] = updatedNote
         return notes
       })
-      // await dbFunctions.notes.updateDocument(selectedNote.$id, payload)
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
