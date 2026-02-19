@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribe = observeAuthState((authUser: User | null) => {
       setUser(authUser)
-      console.log('🚀 ~ AuthProvider ~ authUser:', authUser)
       setIsLoading(false)
     })
 
