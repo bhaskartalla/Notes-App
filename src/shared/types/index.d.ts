@@ -1,3 +1,4 @@
+// TODO: seperate this file once the project is up and running with new folder structure.
 declare module '@/fakeData' {
   export type NoteDataType = {
     id: number
