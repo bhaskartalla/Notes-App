@@ -1,4 +1,30 @@
+# ----------------------------
+# Dependencies
+# ----------------------------
+node_modules/
+
+# ----------------------------
+# Production Builds
+# ----------------------------
+dist/
+dist-ssr/
+.build/
+
+# ----------------------------
+# Environment Variables
+# ----------------------------
+.env
+.env.*
+!.env.example
+
+# ----------------------------
+# Firebase
+# ----------------------------
+.firebase/
+
+# ----------------------------
 # Logs
+# ----------------------------
 logs
 *.log
 npm-debug.log*
@@ -7,21 +33,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# ----------------------------
+# Editor / OS Files
+# ----------------------------
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
 
+# ----------------------------
+# TypeScript
+# ----------------------------
+*.tsbuildinfo
 
-.env
+# ----------------------------
+# Misc
+# ----------------------------
+*.local
