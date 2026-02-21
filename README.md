@@ -76,7 +76,7 @@ Before you begin, ensure you have the following installed:
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/sticky-notes-app.git
+git clone https://github.com/bhaskartalla/Stickky-Note-App
 
 # Navigate to project directory
 cd sticky-notes-app
@@ -184,34 +184,34 @@ npm run dev
 ```
 sticky-notes-app/
 ├── src/
-│   ├── features/              # Feature-based modules
-│   │   ├── auth/             # Authentication feature
-│   │   │   ├── hooks/        # Auth-related hooks
+│   ├── features/                 # Feature-based modules
+│   │   ├── auth/                 # Authentication feature
+│   │   │   ├── hooks/            # Auth-related hooks
 │   │   │   ├── auth.service.ts
 │   │   │   └── auth.context.ts
-│   │   └── notes/            # Notes feature
-│   │       ├── hooks/        # Note-related hooks
-│   │       ├── components/   # Note components
+│   │   └── notes/                # Notes feature
+│   │       ├── hooks/            # Note-related hooks
+│   │       ├── components/       # Note components
 │   │       ├── notes.service.ts
 │   │       └── notes.context.ts
 │   ├── lib/
-│   │   └── firebase/         # Firebase configuration
+│   │   └── firebase/             # Firebase configuration
 │   │       ├── config.ts
 │   │       ├── auth.ts
 │   │       ├── firestore.ts
 │   │       └── index.ts
-│   ├── shared/               # Shared components
-│   │   ├── components/       # Reusable UI components
-│   │   ├── hooks/           # Shared hooks
-│   │   └── utils/           # Utility functions
-│   ├── context/             # Global app context
-│   ├── pages/               # Page components
-│   ├── App.tsx              # Main app component
-│   └── main.tsx             # Entry point
-├── public/                  # Static assets
-├── firebase.json            # Firebase configuration
-├── firestore.rules          # Firestore security rules
-├── firestore.indexes.json   # Firestore indexes
+│   ├── shared/                   # Shared components
+│   │   ├── components/           # Reusable UI components
+│   │   ├── hooks/                # Shared hooks
+│   │   └── utils/                # Utility functions
+│   ├── context/                  # Global app context
+│   ├── pages/                    # Page components
+│   ├── App.tsx                   # Main app component
+│   └── main.tsx                  # Entry point
+├── public/                       # Static assets
+├── firebase.json                 # Firebase configuration
+├── firestore.rules               # Firestore security rules
+├── firestore.indexes.json        # Firestore indexes
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
